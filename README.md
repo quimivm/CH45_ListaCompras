@@ -15,8 +15,8 @@ Los objetivos son:
 4. [*] Realizar las operaciones para conocer el total de elementos
 5. [*] Realizar las operaciones para conocer el total en costo
 6. [*] Almacenar la información en el almacenamiento local del navegador
-7. Mostrar la información almacenada cuando se abra la página
-8. Agregar la funcionalidad del botón de limpiar
+7. [*] Mostrar la información almacenada cuando se abra la página
+8. [*] Agregar la funcionalidad del botón de limpiar
 
 ---
 
