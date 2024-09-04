@@ -4,6 +4,7 @@
 //paso 3: dentro del event listener definimos todas las validaciones
 
 const btnAgregar = document.getElementById("btnAgregar");
+const btnClear = document.getElementById("btnClear");
 const txtName = document.getElementById("Name");
 const txtNumber = document.getElementById("Number");
 const alertValidaciones = document.getElementById("alertValidaciones");
@@ -31,6 +32,8 @@ let costoTotal = 0;
 //vamo' a definir el total en Productos para el Resumen
 let totalEnProductos = 0;
 
+//vamo' a definir una variable
+let datos=new Array ();
 
 //definimos las funciones que vamos a usar aquí afuera del botón para que se puedan reusar
 
@@ -112,6 +115,15 @@ btnAgregar.addEventListener("click", function(event){
                         <td>${txtNumber.value}</td>
                         <td>${precio}</td
                     </tr>`;
+
+        //esto es para el json, para poder guardar la información de la lista en el localstorage como string pq sólo se puede guardar en string
+        let elemento = {"contador":contador,
+                        "nombre":txtName.value,
+                        "cantidad":txtNumber.value,
+                        "precio":precio};
+        datos.push(elemento);
+        localStorage.setItem("datos",JSON.stringify(datos));
+
         //dónde insertamos los elementos que añadimos a la lista (en qué posición): beforeend para que se añadan al último de lo que ya hemos puesto
         cuerpoTabla.insertAdjacentHTML("beforeend",row);
         
@@ -126,7 +138,7 @@ btnAgregar.addEventListener("click", function(event){
         
         //estos son los textos que se muestran en resumen
         productosTotal.innerText = totalEnProductos;
-        precioTotal.innerText = "$ "+costoTotal;
+        precioTotal.innerText = "$ "+costoTotal.toFixed(2);
 
         //vamos a guardar los valores de la lista en el local storage para que si se cierra la sesión se guarden mis datos
         localStorage.setItem("contador", contador);
@@ -141,6 +153,40 @@ btnAgregar.addEventListener("click", function(event){
     } //if isValid
 
 }) //btnAgregar.addEventListener
+
+
+//aquí empieza el botón clear
+btnClear.addEventListener("click", function(event){
+    event.preventDefault();
+    //Debe limpiar el valor de los campos
+    txtName.value="";
+    txtNumber.value="";
+    //Limpiar el valor del local storage, tenemos dos formas:
+    //1) eliminar cada llave/clave, o sea elemento por elemento
+    //localStorage.removeItem("contador");
+    //localStorage.removeItem("costoTotal");
+    //localStorage.removeItem("totalEnProductos");
+    //2) eliminar todo el contenido del localStorage
+    localStorage.clear();
+    //Limpiar la tabla
+    cuerpoTabla.innerHTML="";
+    //Reiniciar (NO poner let pq no las estamos volviendo a definir) las variables contador, costoTotal, totalEnProductos
+    contador=0;
+    costoTotal=0;
+    totalEnProductos=0;
+    //Asignar las variables a los divs
+    contadorProductos.innerText=contador;
+    productosTotal.innerText=totalEnProductos;
+    precioTotal.innerText = "$ "+costoTotal.toFixed(2);
+    //Ocultar la alerta
+    alertValidacionesTexto.innerHTML="";
+    alertValidaciones.style.display="none";
+    //Quitar los bordes
+    txtName.style.border="";
+    txtNumber.style.border="";
+    //vamo' a agregar el focus al campo del nombre (aunque le podemos poner required autofocus en html)
+    txtName.focus();
+});
 
 
 //blur es cuando el campo pierde el foco (como nos cambiamos a otro), el contrario de spotlight, es el halo azul que te dice en qué campo estás situado
@@ -171,6 +217,22 @@ window.addEventListener("load", function(){
     contadorProductos.innerText=contador;
     productosTotal.innerText=totalEnProductos;
     precioTotal.innerText="$ "+costoTotal.toFixed(2);
+
+    //vamos a cargar los datos de la lista con json, tenemos que regresar del arreglo en strings a la lista
+    if(this.localStorage.getItem("datos") !=null){
+        datos=JSON.parse(this.localStorage.getItem("datos"));
+    }//!=null
+    //ya que mandamos recuperar la lista, la volvemos a desplegar con el insertAdjacentHTML
+    datos.forEach(r=>{
+        let row = `<tr>
+                        <td>${r.contador}</td>
+                        <td>${r.nombre}</td>
+                        <td>${r.cantidad}</td>
+                        <td>${r.precio}</td>
+                    </tr>`;
+        cuerpoTabla.insertAdjacentHTML("beforeend",row);
+    });
+
 }); //window load
 
 
