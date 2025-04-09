@@ -24,6 +24,11 @@ Los objetivos son:
 
 *Existe un archivo js/main.js vinculado donde se debe agregar el código para manipular el DOM*
 
+---
 
+Notes 08-Apr-25:
+Add: botecito de basura para eliminar el producto sin importar cuántos haya
+Add: counter visual a través de flechas en lugar de insertar el número
+Add: info adicional para categorizar y tener diferentes listas
 
 
